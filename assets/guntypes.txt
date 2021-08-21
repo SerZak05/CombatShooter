@@ -1,0 +1,43 @@
+[
+    {
+        "name": "machineGun",
+        "shootingSpeed": 5,
+        "reloadTime": 120,
+        "ammoType": "machineGunAmmo",
+        "textureName": "machineGun.png",
+        "shootSound": [
+            "machinegunshoot.wav"
+        ]
+    },
+    {
+        "name": "rifle",
+        "shootingSpeed": 35,
+        "reloadTime": 60,
+        "ammoType": "rifleAmmo",
+        "textureName": "rifle.png",
+        "shootSound": [
+            "rifleshoot"
+        ]
+    },
+    {
+        "name": "revolver",
+        "shootingSpeed": 20,
+        "reloadTime": 55,
+        "ammoType": "revolverAmmo",
+        "textureName": "revolver.png",
+        "shootSound": [
+            "rifleshoot",
+            "shoot.wav"
+        ]
+    },
+    {
+      "name": "rocketLauncher",
+        "shootingSpeed": 60,
+        "reloadTime": 120,
+        "ammoType": "rockets",
+        "textureName": "rocketlauncher.png",
+        "shootSound": [
+            "rocketlaunch.wav"
+        ]
+    }
+]

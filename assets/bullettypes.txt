@@ -1,0 +1,34 @@
+[
+    {
+        "name": "machineGunAmmo",
+        "damage": 0.5,
+        "lifespan": 58,
+        "speed": 15,
+        "stacksize": 30,
+        "canRicochet": true
+    },
+    {
+        "name": "rifleAmmo",
+        "damage": 5,
+        "lifespan": 90,
+        "speed": 18,
+        "stacksize": 10,
+        "canRicochet": true
+    },
+    {
+        "name": "revolverAmmo",
+        "damage": 15,
+        "lifespan": 78,
+        "speed": 13,
+        "stacksize": 6,
+        "canRicochet": false
+    },
+    {
+        "name": "rockets",
+        "damage": 40,
+        "lifespan": 80,
+        "speed": 5,
+        "stacksize": 1,
+        "canRicochet": false
+    }
+]
