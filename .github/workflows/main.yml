@@ -1,0 +1,31 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+    branches: [ master ]
+
+  # Allows to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        release-os: [linux, windows]
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Processing dep
+        run: wget -O- https://github.com/processing/processing/releases/download/processing-0270-3.5.4/processing-3.5.4-linux64.tgz |tar xzgv -
+
+      - name: build
+        run:  ./processing-3.5.4/processing-java --sketch=`pwd` --output="CombatShooter-release" --platform=${{matrix.release-os}} --export
+
+      - name: Save results
+        uses: actions/upload-artifact@v2
+        with:
+          name: ${{matrix.release-os}}-release
+          path: CombatShooter-release
