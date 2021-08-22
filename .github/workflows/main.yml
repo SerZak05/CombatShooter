@@ -25,7 +25,7 @@ jobs:
         run: |
           mkdir libraries
           cd libraries
-          wget -O- https://github.com/processing/processing-sound/releases/download/v2.3.1/sound.zip
+          wget https://github.com/processing/processing-sound/releases/download/v2.3.1/sound.zip
           unzip sound.zip -d sound
           ls -la
     
