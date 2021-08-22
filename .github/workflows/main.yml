@@ -23,6 +23,7 @@ jobs:
         
       - name: Processing Sound lib
         run: |
+          cd ..
           mkdir libraries
           wget https://github.com/processing/processing-sound/releases/download/v2.3.1/sound.zip
           unzip sound.zip -d libraries
@@ -36,7 +37,6 @@ jobs:
         run:  |
           ls -la
           pwd
-          ls libraries/sound
           ./processing-3.5.4/processing-java --sketch=`pwd` --output="CombatShooter-release" --platform=${{matrix.release-os}} --export
 
       - name: Save results
