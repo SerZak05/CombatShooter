@@ -27,11 +27,12 @@ jobs:
           cd libraries
           wget https://github.com/processing/processing-sound/releases/download/v2.3.1/sound.zip
           unzip sound.zip -d sound
-          ls -la
     
 
       - name: build
-        run:  ./processing-3.5.4/processing-java --sketch=`pwd` --output="CombatShooter-release" --platform=${{matrix.release-os}} --export
+        run:  |
+          ls -la
+          ./processing-3.5.4/processing-java --sketch=`pwd` --output="CombatShooter-release" --platform=${{matrix.release-os}} --export
 
       - name: Save results
         uses: actions/upload-artifact@v2
