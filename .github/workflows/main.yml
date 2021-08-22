@@ -27,6 +27,10 @@ jobs:
           wget https://github.com/processing/processing-sound/releases/download/v2.3.1/sound.zip
           unzip sound.zip -d libraries
     
+      - name: Searching for sketchbook
+        run: |
+          find ~/ sketchbook
+          find ~/ Processing
 
       - name: build
         run:  |
