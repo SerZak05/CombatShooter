@@ -32,6 +32,9 @@ jobs:
       - name: build
         run:  |
           ls -la
+          pwd
+          ls libraries
+          ls libraries/sound
           ./processing-3.5.4/processing-java --sketch=`pwd` --output="CombatShooter-release" --platform=${{matrix.release-os}} --export
 
       - name: Save results
