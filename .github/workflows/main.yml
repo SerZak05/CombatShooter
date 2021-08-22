@@ -29,8 +29,8 @@ jobs:
     
       - name: Searching for sketchbook
         run: |
-          find ~/ sketchbook
-          find ~/ Processing
+          find ~/ -iname sketchbook
+          find ~/ -iname Processing
 
       - name: build
         run:  |
