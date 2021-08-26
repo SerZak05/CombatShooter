@@ -30,8 +30,7 @@ jobs:
     
       - name: Searching for sketchbook
         run: |
-          find ~/ -iname sketchbook
-          find ~/ -iname Processing
+          ls -la ~
 
       - name: build
         run:  |
