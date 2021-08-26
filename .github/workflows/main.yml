@@ -23,14 +23,14 @@ jobs:
         
       - name: Processing Sound lib
         run: |
-          cd ..
+          cd ../..
           mkdir libraries
           wget https://github.com/processing/processing-sound/releases/download/v2.3.1/sound.zip
           unzip sound.zip -d libraries
     
       - name: Searching for sketchbook
         run: |
-          ls -la ~
+          ls -la ~/work
 
       - name: build
         run:  |
