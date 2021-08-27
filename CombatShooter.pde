@@ -4,13 +4,13 @@
  * Simple 2D shooter game
  */
 
-//import processing.sound.*;
-//Sound s;
+import processing.sound.*;
+Sound s;
 
 boolean mute = false;
 float volume = 1;
 
-Assets assets = new Assets( "assets/" );
+Assets assets = new Assets( "data/" );
 
 enum AppState {
   MainMenu, Game, Settings, LevelSelect, About_us
@@ -35,15 +35,15 @@ void setup() {
   changeState( AppState.MainMenu );
   //LevelSelectCallback.selectedLevel = 0;
 
-  //assets.audio.preload();
+  assets.audio.preload();
 }
 
 void draw() {
-  /*if ( mute ) {
-    s.volume( 0 );
-  } else {
-    s.volume( volume );
-  }*/
+  //if ( mute ) {
+  //  s.volume( 0 );
+  //} else {
+  //  s.volume( volume );
+  //}
   background( backGround );
 
   uiScene.update();
@@ -97,6 +97,6 @@ Scene createGameScene( AppState st ) {
  * Utility function. Loads sound file.
  * Sound file cannot be loaded locally (PApplet is needed). 
  */
-/*SoundFile loadSound( String path ) {
+SoundFile loadSound( String path ) {
   return new SoundFile( this, path );
-}*/
+}

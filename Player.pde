@@ -14,7 +14,7 @@ class Player extends Object {
   private BigRoundMovable m_movable;
   private Destroyable m_destroyable;
   private Warrior m_warrior;
-  //private AudioSource m_audio;
+  private AudioSource m_audio;
   private Indicator m_health;
 
   Gun gun;
@@ -36,8 +36,8 @@ class Player extends Object {
     m_warrior = new Warrior( this, 0 );
     behaviours.add( m_warrior );
 
-    //m_audio = new AudioSource( this, assets.audio );
-    //behaviours.add( m_audio );
+    m_audio = new AudioSource( this, assets.audio );
+    behaviours.add( m_audio );
 
     gun = new Gun( "rifle", x, y, 50, 25 );
   }
@@ -80,7 +80,7 @@ class Player extends Object {
     m_scene.origin = PVector.sub( coor, new PVector( width/2, height/2 ) );
 
     if ( currSpeed.x != 0 || currSpeed.y != 0 ) {
-      //m_audio.playRandomSound( "walk" );
+      m_audio.playRandomSound( "walk" );
     }
   }
 
@@ -103,12 +103,12 @@ class Player extends Object {
     m_scene.removeObj( this );
 
     //assets.audio.playSound( "gameover.wav" );
-    //m_audio.playSound( "gameover.wav" );
+    m_audio.playSound( "gameover.wav" );
   }
 
   /** Called, when player wins. Activates win sequence (you win!). */
   void win() {
-    //m_audio.playSound( "win.wav" );
+    m_audio.playSound( "win.wav" );
 
     Widget winDialog = new Widget( "WinDialog", width/4, height/4, width/2, height/2, uiScene );
     Label l = new Label( "You won!", 0, 0, width/2, height/4, uiScene );
@@ -139,7 +139,7 @@ class Player extends Object {
       m_scene.removeObj( this );
     }
 
-    //m_audio.update();
+    m_audio.update();
 
 
     move();
@@ -189,7 +189,7 @@ class Turret extends Object {
   private Destroyable m_dest;
   private Targetable m_targetable;
   private Indicator m_health;
-  //private AudioSource m_audio;
+  private AudioSource m_audio;
 
   Turret( Scene sc, float x, float y, float r, int teamNum ) {
     super( sc, x, y );
@@ -218,7 +218,7 @@ class Turret extends Object {
     m_targetable = new Targetable( this );
     behaviours.add( m_targetable );
 
-    //m_audio = new AudioSource( this, assets.audio );
+    m_audio = new AudioSource( this, assets.audio );
   }
 
   void update() {
@@ -226,7 +226,7 @@ class Turret extends Object {
 
     if ( m_dest.health <= 0 ) {
       m_scene.removeObj( this );
-      //m_audio.playRandomSound( "explosion" );
+      m_audio.playRandomSound( "explosion" );
       return;
     }
 

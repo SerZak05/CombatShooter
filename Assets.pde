@@ -2,7 +2,7 @@
 class Assets {
   String dataFolder;        ///< root folder of the game
 
-  //AudioRepository audio;    ///< global audio repository
+  AudioRepository audio;    ///< global audio repository
   ImageRepository img;      ///< global image repository
   LevelRepository levels;   ///< global level repository
   GunRepository guns;       ///< global gun repository
@@ -10,7 +10,7 @@ class Assets {
 
   Assets( String fold ) {
     dataFolder = fold;
-    //audio = new AudioRepository( this );
+    audio = new AudioRepository( this );
     img = new ImageRepository( this );
     levels = new LevelRepository( this );
     guns = new GunRepository( this );

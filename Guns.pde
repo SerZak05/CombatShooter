@@ -22,7 +22,7 @@ class Gun {
   PVector bulletSpawn; ///< the end of a gun (where bullets spawn) in relative
   float rot = 0; ///< in radians
 
-  //private AudioSource m_audio = new AudioSource( null, assets.audio );
+  private AudioSource m_audio = new AudioSource( null, assets.audio );
   Gun( String type, float x, float y ) {
     this.type = type;
     build();
@@ -67,7 +67,7 @@ class Gun {
   /** Called each tick */
   void update() {
     if ( currReload > 0 ) currReload--;
-    //m_audio.update();
+    m_audio.update();
   }
 
   /** Returns, if the gun has shot */
@@ -87,7 +87,7 @@ class Gun {
 
       //play sound
       int randomSound = (int)random( shootSound.length );
-      //m_audio.playSound( shootSound[randomSound] );
+      m_audio.playSound( shootSound[randomSound] );
       return true;
     }
     return false;
