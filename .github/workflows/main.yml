@@ -20,9 +20,15 @@ jobs:
 
       - name: Processing dep
         run: wget -O- https://github.com/processing/processing/releases/download/processing-0270-3.5.4/processing-3.5.4-linux64.tgz |tar xzgv -
+        
+      - name: Processing Sound lib
+        run: |
+          cd processing-3.5.4/modes/java
+          wget https://github.com/processing/processing-sound/releases/download/v2.3.1/sound.zip
+          unzip sound.zip -d libraries
 
       - name: build
-        run:  ./processing-3.5.4/processing-java --sketch=`pwd` --output="CombatShooter-release" --platform=${{matrix.release-os}} --export
+        run: ./processing-3.5.4/processing-java --sketch=`pwd` --output="CombatShooter-release" --platform=${{matrix.release-os}} --export
 
       - name: Save results
         uses: actions/upload-artifact@v2

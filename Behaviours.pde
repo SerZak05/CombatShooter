@@ -293,7 +293,7 @@ class Targetable extends Behaviour {
 }
 
 /** Behaviour of noizemaking objects */
-/*class AudioSource extends Behaviour {
+class AudioSource extends Behaviour {
   private AudioRepository m_rep;
   private HashMap<String, Thread> m_threads = new HashMap<String, Thread>();
   AudioSource( Object obj, AudioRepository r ) {
@@ -302,7 +302,7 @@ class Targetable extends Behaviour {
   }
 
   /** Returns false if this sound is already playing. */
-/*  boolean playSound( final String name ) {
+  boolean playSound( final String name ) {
     if ( m_threads.containsKey( name ) ) return false;
     Thread th = m_rep.playSound( name );
     if ( th == null ) return true;
@@ -315,7 +315,7 @@ class Targetable extends Behaviour {
    * Returns false if this sound is already playing.
    * Plays random sound from a given folder @param name.
    */
-  /*boolean playRandomSound( final String name ) {
+  boolean playRandomSound( final String name ) {
     if ( m_threads.containsKey( name ) ) return false;
     Thread th = m_rep.playRandomSound( name );
     if ( th == null ) return true;
@@ -328,7 +328,7 @@ class Targetable extends Behaviour {
    * Called each tick.
    * Checks, if threads are alive, deletes dead threads.
    */
-  /*void update() {
+  void update() {
     HashMap<String, Thread> updated_threads = new HashMap<String, Thread>();
     for ( HashMap.Entry<String, Thread> e : m_threads.entrySet() ) {
       Thread th = e.getValue();
@@ -340,7 +340,7 @@ class Targetable extends Behaviour {
     }
     m_threads = updated_threads;
   }
-}*/
+}
 
 
 /*class Shootable extends Behaviour {

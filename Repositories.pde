@@ -1,12 +1,12 @@
 import java.lang.Thread;
 import java.lang.Runnable;
 
-/*class AudioRepository {
+class AudioRepository {
   private final String soundFolder = "Sounds/";
   private Assets m_assets;
   private HashMap<String, SoundFile> sounds = new HashMap<String, SoundFile>();
-  //private ArrayList<AudioSource> sources = new ArrayList<AudioSource>();
-  //private volatile StringList playingSounds = new StringList();
+  private ArrayList<AudioSource> sources = new ArrayList<AudioSource>();
+  private volatile StringList playingSounds = new StringList();
   AudioRepository( Assets ass ) {
     m_assets = ass;
   }
@@ -94,7 +94,7 @@ import java.lang.Runnable;
             sound = getFile( name );
           }
           if ( sound == null ) return;
-          //if ( sound.isPlaying() ) return;
+          if ( sound.isPlaying() ) return;
           sound.play();
 
           Thread.sleep( t );
@@ -137,7 +137,7 @@ import java.lang.Runnable;
       return null;
     }
   }
-}*/
+}
 
 
 
