@@ -23,19 +23,13 @@ jobs:
         
       - name: Processing Sound lib
         run: |
-          mkdir libraries
+          cd processing-3.5.4/modes/java
           wget https://github.com/processing/processing-sound/releases/download/v2.3.1/sound.zip
           unzip sound.zip -d libraries
-    
-      - name: Searching for sketchbook
-        run: |
-          ls -la ~/work
 
       - name: build
         run:  |
-          ls -la
-          pwd
-          ./processing-3.5.4/processing-java --sketch=`pwd` --output="CombatShooter-release" --platform=${{matrix.release-os}} --export --sketch-folder=`pwd`
+          ./processing-3.5.4/processing-java --sketch=`pwd` --output="CombatShooter-release" --platform=${{matrix.release-os}} --export
 
       - name: Save results
         uses: actions/upload-artifact@v2
