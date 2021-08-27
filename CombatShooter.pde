@@ -10,7 +10,7 @@ Sound s;
 boolean mute = false;
 float volume = 1;
 
-Assets assets = new Assets( "assets/" );
+Assets assets = new Assets( "data/" );
 
 enum AppState {
   MainMenu, Game, Settings, LevelSelect, About_us
