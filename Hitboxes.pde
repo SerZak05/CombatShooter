@@ -86,7 +86,7 @@ interface Hitbox {
    * if true, returns intersection point, null otherwise.
    */
   PVector hasIntersection( PVector p1, PVector p2 );
-  /** Returns null, if not hit, returns new bounced pos otherwise. */
+  /** Returns null, if not hit, returns new bounced velocity otherwise. */
   PVector isHit( PVector from, PVector to );
   /** Returns shortest path from a point to hitbox. */
   PVector distVector( final PVector from );

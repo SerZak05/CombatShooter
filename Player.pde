@@ -79,8 +79,8 @@ class Player extends Object {
 
     m_scene.origin = PVector.sub( coor, new PVector( width/2, height/2 ) );
 
-    if ( currSpeed.x != 0 || currSpeed.y != 0 ) {
-      m_audio.playRandomSound( "walk" );
+    if ( currSpeed.magSq() > 0 ) {
+      m_audio.playRandomSoundWithDelay( "walk", (long)(1.0 / currSpeed.mag() + 1) * 500 );
     }
   }
 

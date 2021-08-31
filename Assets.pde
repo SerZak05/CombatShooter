@@ -21,6 +21,10 @@ class Assets {
   File getFile( final String name ) {
     return sketchFile( dataFolder + name );
   }
+  
+  String getAbsolutePath() {
+    return getFile("").getPath();
+  }
 }
 
 /** Interface for objects` builders */

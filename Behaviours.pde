@@ -301,10 +301,16 @@ class AudioSource extends Behaviour {
     m_rep = r;
   }
 
-  /** Returns false if this sound is already playing. */
-  boolean playSound( final String name ) {
-    if ( m_threads.containsKey( name ) ) return false;
-    Thread th = m_rep.playSound( name );
+  /** 
+   * Plays sound only if previous sound with the same name already played @param duration.
+   * Returns false if previous sound haven't played that much.
+   * Duration in milliseconds.
+   */
+  boolean playSoundWithDelay(final String name, final long duration) {
+    if ( m_threads.containsKey( name ) ) {
+      return false;
+    }
+    Thread th = m_rep.getSoundThread(name, duration);
     if ( th == null ) return true;
     th.start();
     m_threads.put( name, th );
@@ -312,16 +318,30 @@ class AudioSource extends Behaviour {
   }
 
   /**
-   * Returns false if this sound is already playing.
    * Plays random sound from a given folder @param name.
    */
-  boolean playRandomSound( final String name ) {
-    if ( m_threads.containsKey( name ) ) return false;
-    Thread th = m_rep.playRandomSound( name );
+  boolean playRandomSoundWithDelay(final String categoryName, final long duration) {
+    if ( m_threads.containsKey( categoryName ) ) return false;
+    Thread th = m_rep.getRandomSoundThread(categoryName, duration);
     if ( th == null ) return true;
     th.start();
-    m_threads.put( name, th );
+    m_threads.put( categoryName, th );
     return true;
+  }
+  
+  /**
+   * Plays sound on the background
+   */
+  void playSound(final String name) {
+    Thread th = m_rep.getSoundThreadOrRandomSoundThread(name);
+    th.start();
+    m_threads.put(name, th);
+  }
+  
+  void playRandomSound(final String categoryName) {
+    Thread th = m_rep.getRandomSoundThread(categoryName);
+    th.start();
+    m_threads.put(categoryName, th);
   }
 
   /** 
@@ -332,9 +352,8 @@ class AudioSource extends Behaviour {
     HashMap<String, Thread> updated_threads = new HashMap<String, Thread>();
     for ( HashMap.Entry<String, Thread> e : m_threads.entrySet() ) {
       Thread th = e.getValue();
-      if ( !th.isAlive() ) {
-        th.stop();
-      } else {
+      // println(th.getState());
+      if ( th.isAlive() ) {
         updated_threads.put( e.getKey(), th );
       }
     }

@@ -2,18 +2,22 @@ import java.lang.Thread;
 import java.lang.Runnable;
 
 class AudioRepository {
-  private final String soundFolder = "Sounds/";
+  private final String soundFolder = "Sounds";
   private Assets m_assets;
   private HashMap<String, SoundFile> sounds = new HashMap<String, SoundFile>();
-  private ArrayList<AudioSource> sources = new ArrayList<AudioSource>();
-  private volatile StringList playingSounds = new StringList();
-  AudioRepository( Assets ass ) {
-    m_assets = ass;
+  // private ArrayList<AudioSource> sources = new ArrayList<AudioSource>();
+  // private volatile StringList playingSounds = new StringList();
+  AudioRepository( Assets asset ) {
+    m_assets = asset;
   }
 
-  void saveFile( final String name ) {
+  void saveFile(final String name, final String path) {
     if ( !sounds.containsKey( name ) ) {
-      sounds.put( name, loadSound( m_assets.dataFolder + soundFolder + name ) );
+      File f = new File(path);
+      if (f.exists())
+        sounds.put( name, loadSound( path ) );
+      else
+        println("Saving non-existing sound file: " + path);
     }
   }
 
@@ -28,7 +32,11 @@ class AudioRepository {
       File[] list = f.listFiles();
       for ( File f_ : list ) preload( f_ );
     } else {
-      saveFile( f.getPath().substring( (m_assets.getFile("").getPath() + soundFolder).length(), f.getPath().length() ) );
+      String pathToSoundFolder = assets.getAbsolutePath() + "/" + soundFolder + "/";
+      String relPath = f.getAbsolutePath().substring(pathToSoundFolder.length(), f.getPath().length());
+      relPath = relPath.replace('\\', '/');
+      println(relPath);
+      saveFile(relPath, f.getPath());
     }
   }
 
@@ -40,83 +48,70 @@ class AudioRepository {
   }
 
   private SoundFile getFile( final String name ) {
-    SoundFile sound = null;
-    saveFile( name );
-    sound = sounds.get( name );
-    return sound;
+    if (sounds.containsKey(name))
+      return sounds.get(name);
+    println(name);
+    return null;
   }
-
-  //returns a sound thread
-  Thread playSound( final String name ) {
-    if ( mute ) return null;
-    File f = m_assets.getFile( soundFolder + name );
-    if ( f.isDirectory() ) {
-      return playRandomSound( name );
+  
+  /**
+   * Returns a thread that plays random sound file from named directory (@param categoryName)
+   * for a @param duration (in millis) of time.
+   * Returns dummy thread, if no directory or sound files were found.
+   */
+  
+  Thread getRandomSoundThread(final String categoryName, final long duration) {    
+    String filePath = getRandomSoundFile(categoryName);
+    if (filePath != null) {
+      return getSoundThread(filePath, duration);
+    } else {
+      return new Thread();
     }
-
-    java.lang.Runnable task = new Runnable() {
-      @Override
-        public void run() {
-        SoundFile sound = null;
-        try {
-          synchronized (sounds) {
-            sound = getFile( name );
-          }
-          if ( sound == null ) return;
-          //if ( sound.isPlaying() ) return;
-          sound.play();
-
-          Thread.currentThread().sleep( (long)(sound.duration()*1000) );
-        }
-        catch ( InterruptedException e ) {
-          sound.stop();
-        }
-        finally {
-          //Thread.currentThread().stop();
-          return;
-        }
-      }
-    };
-
-    Thread th = new Thread( task );
-    return th;
   }
-
-  Thread playSound( final String name, final int t ) {
-    if ( mute ) return null;
-
-    java.lang.Runnable task = new Runnable() {
-      @Override
-        public void run() {
-        SoundFile sound = null;
-        try {
-          synchronized (sounds) {
-            sound = getFile( name );
-          }
-          if ( sound == null ) return;
-          if ( sound.isPlaying() ) return;
-          sound.play();
-
-          Thread.sleep( t );
-        }
-        catch ( InterruptedException e ) {
-        }
-        finally {
-          sound.stop();
-          //Thread.currentThread().stop();
-          return;
-        }
-      }
-    };
-
-    Thread th = new Thread( task );
-    return th;
+  
+  Thread getRandomSoundThread(final String categoryName) {
+    String filePath = getRandomSoundFile(categoryName);
+    if (filePath != null) {
+      return getSoundThread(filePath);
+    } else {
+      return new Thread();
+    }
   }
-
-  //plays random sound in given category (directory)
-  Thread playRandomSound( final String category ) {
-    if ( mute ) return null;
-    File dir = m_assets.getFile( "Sounds/" + category );
+  
+  /**
+   * Returns a thread that plays named sound for a @param duration (in millis) of time.
+   * After playing, thread dies.
+   * Returns dummy thread, if sound is not found.
+   */
+  Thread getSoundThread(final String name, final long duration) {
+    SoundFile sound = getFile(name);
+    if ( sound != null ) {
+      return getSoundThread(sound, duration);
+    }
+    return new Thread();
+  }
+  
+  Thread getSoundThread(final String name) {
+    SoundFile sound = getFile(name);
+    if ( sound != null ) {
+      return getSoundThread(sound, (long)(sound.duration() * 1000));
+    }
+    return new Thread();
+  }
+  
+  Thread getSoundThreadOrRandomSoundThread(final String name) {
+    File f = assets.getFile(soundFolder + "/" + name);
+    if (f.exists()) {
+      if (f.isDirectory()) {
+        return getRandomSoundThread(name);
+      }
+      return getSoundThread(name);
+    }
+    return new Thread();
+  }
+  
+  private String getRandomSoundFile(final String dirPath) {
+    File dir = sketchFile(assets.dataFolder + soundFolder + "/" + dirPath);
     if ( dir.exists() && dir.isDirectory() ) {
       File[] files = dir.listFiles();
       StringList sounds = new StringList();
@@ -125,17 +120,46 @@ class AudioRepository {
       for ( int i = 0; i < files.length; i++ ) {
         if ( files[i].exists() && files[i].isFile() ) {
           sounds.append( files[i].getName() );
-          //if one of those sounds is playing, return
-          //SoundFile s = loadSound( files[i].getPath() );
-          //if ( s.isPlaying() ) return;
         }
+      }
+      
+      if (sounds.size() == 0) {
+        println("Random file in \"" + dirPath + "\" was not found!");
+        return null;
       }
 
       int randomSound = (int)random( sounds.size() );
-      return playSound( category + "/" + sounds.get( randomSound ) );
-    } else {
-      return null;
+      return dirPath + "/" + sounds.get( randomSound );
     }
+    println("Folder \"" + dirPath + "\" was not found!");
+    return null;
+  }
+  
+  private final Thread getSoundThread(final SoundFile sound, final long duration) {
+    if (sound == null) {
+      println("Making thread out of null sound file");
+      return new Thread();
+    }
+    
+    
+    Runnable task = new Runnable() {
+      @Override
+      public void run() {
+        try {
+          float[] soundData = new float[sound.frames() * sound.channels()];
+          sound.read(soundData);
+          AudioSample copySound = new AudioSample(CombatShooter.this, soundData, sound.channels() == 2);
+          // println("Sound playing");
+          copySound.playFor(duration);
+          Thread.sleep(duration);
+        } catch (InterruptedException e) {
+        } finally {
+          // println("Sound stops");
+        }
+      }
+    };
+    
+    return new Thread(task);
   }
 }
 
@@ -147,8 +171,8 @@ class ImageRepository {
 
   private final String imgFolder = "";
 
-  ImageRepository( Assets ass ) {
-    m_assets = ass;
+  ImageRepository( Assets asset ) {
+    m_assets = asset;
   }
 
   void preload( final String folder ) {
@@ -185,8 +209,8 @@ class LevelRepository {
 
   private final String m_folder = "Levels/";
 
-  LevelRepository( Assets ass ) {
-    m_assets = ass;
+  LevelRepository( Assets asset ) {
+    m_assets = asset;
   }
 
   void preload() {
@@ -316,8 +340,8 @@ class GunRepository {
   private Assets m_assets;
   private HashMap<String, JSONObject> gunTypes = new HashMap<String, JSONObject>();
 
-  GunRepository( Assets ass ) {
-    m_assets = ass;
+  GunRepository( Assets asset ) {
+    m_assets = asset;
   }
 
   void loadGunTypes( String fileName ) {
@@ -349,8 +373,8 @@ class BulletRepository {
   private Assets m_assets;
   private HashMap<String, JSONObject> bulletTypes = new HashMap<String, JSONObject>();
 
-  BulletRepository( Assets ass ) {
-    m_assets = ass;
+  BulletRepository( Assets asset ) {
+    m_assets = asset;
   }
 
 
